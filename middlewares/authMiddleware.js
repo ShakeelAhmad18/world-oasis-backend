@@ -19,7 +19,7 @@ const protecter=asyncHandler( async (req,res,next)=>{
     const guests=await Guest.findById(verified.id).select('-password')
     
     if(!guests){
-        res.status(401)
+        res.status(404)
         throw new Error('User not found')
     }
      
@@ -28,9 +28,7 @@ const protecter=asyncHandler( async (req,res,next)=>{
     next();
 
   } catch (error) {
-
-    res.status(401)
-    throw new Error('Not Authorized User')
+     res.status(401).json('Not Authorized User')
   }
 
 } )

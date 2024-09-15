@@ -47,24 +47,11 @@ app.use('/api/sitting',siitingRoute)
 
 app.post('/api/create-checkout-session', async (req, res) => {
     // Access the nested cabins object
-    const cabin = req.body.cabins; // Update this to get the correct data
+    const cabin = req.body.cabins; 
 
-    console.log("Received cabin data:", cabin);
-
-    // Ensure cabinPrice exists and is a number
-    if (!cabin || typeof cabin.cabinPrice === 'undefined' || isNaN(cabin.cabinPrice)) {
-        console.error("Invalid or missing cabinPrice:", cabin.cabinPrice);
-        return res.status(400).json({ error: "Invalid cabin price" });
-    }
-
-    // Log cabinPrice to check if it's valid
-    console.log("cabinPrice:", cabin.cabinPrice);
-
-    // Parse cabinPrice as a float and multiply by 100 to convert to cents
-    const unitAmount = Math.round(parseFloat(cabin.cabinPrice) * 100);
-
+    const unitAmount = Math.round(parseFloat(cabin.regularprice) * 100);
+    
     // Log unitAmount to check if it's valid
-    console.log("unitAmount:", unitAmount);
 
     if (isNaN(unitAmount)) {
         return res.status(400).json({ error: "Invalid cabin price" });
@@ -74,9 +61,9 @@ app.post('/api/create-checkout-session', async (req, res) => {
         price_data: {
             currency: 'usd',
             product_data: {
-                name: cabin.name ? `Cabin Name: ${cabin.name}` : 'Cabin', // Fallback name if cabinId is missing
+                name: cabin.name ? `Cabin Name: ${cabin.name}` : 'Cabin', 
             },
-            unit_amount: unitAmount // Price in cents
+            unit_amount: unitAmount 
         },
         quantity: cabin.numNights
     }];
@@ -96,7 +83,6 @@ app.post('/api/create-checkout-session', async (req, res) => {
         res.status(500).json({ error: "Failed to create checkout session" });
     }
 });
-
 
 
 
